@@ -35,9 +35,8 @@ vim.keymap.set('n', '<leader>td', '<cmd>TodoTelescope<CR>')
 vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<CR>",
   {silent = true, noremap = true}
 )
-
--- Undotree
-vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+-- JDTLS Imports
+vim.keymap.set("n", "<C-o", "<Cmd>lua require'jdtls'.organize_imports()<CR>")
 
 -- CellularAutomaton
 vim.keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
@@ -47,4 +46,4 @@ vim.keymap.set("n", "<leader>gof", "<cmd>CellularAutomaton game_of_life<CR>")
 vim.keymap.set("n", "<leader>c", "<cmd>VimtexCompile<CR>")
 
 -- NvimTree
-vim.keymap.set("n", "<leader>t", "<cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<leader>tt", "<cmd>NvimTreeToggle<CR>")

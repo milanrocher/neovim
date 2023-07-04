@@ -27,19 +27,14 @@ vim.api.nvim_create_autocmd(
   { pattern = 'plugins.lua', command = 'source <afile> | PackerSync' }
 )
 
-vim.api.nvim_create_autocmd(
-  {"BufWritePre"},
-  { command = 'Neoformat' }
-)
-
 -- Plugin Setup
+require("nvim-surround").setup()
 require("todo-comments").setup()
 require("twilight").setup()
 require("zen-mode").setup()
 require('nvim-web-devicons').setup()
 require('lualine').setup()
 require("nvim-tree").setup()
-require('telescope').setup()
 require("nvim-autopairs").setup() 
 require('trouble').setup()
 require('lualine').setup()
@@ -48,9 +43,21 @@ require('gitsigns').setup()
 
 require'alpha'.setup(require'alpha.themes.startify'.config)
 
+require("chatgpt").setup{
+  popup_input = { submit = "<C-s>", },
+}
+
 require("toggleterm").setup{
   open_mapping = [[<A-t>]],
   shade_terminals = false,
+}
+
+require('telescope').setup{
+  pickers = {
+    find_files = {
+      no_ignore=true
+    }
+  }
 }
 
 require('nvim-treesitter.configs').setup {
@@ -90,11 +97,54 @@ require("bufferline").setup {
   }
 }
 
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-  suggest_lsp_servers = true,
-})
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.skip_server_setup({'jdtls'})
 
 lsp.setup()
+
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
+require('luasnip.loaders.from_vscode').lazy_load()
+
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
+
+cmp.setup({
+  manage_nvim_cmp = {
+    set_sources = 'recommended',
+    set_basic_mappings = true,
+    set_extra_mappings = false,
+    use_luasnip = true,
+    set_format = true,
+    documentation_window = true,
+  },
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp'},
+    {name = 'nvim_lua'},
+    {name = 'buffer', keyword_length = 3},
+    {name = 'luasnip', keyword_length = 2},
+  },
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm({select = true}),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<Tab>'] = cmp.mapping.select_next_item(cmp_select_opts),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select_opts),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  }
+})
+
+vim.diagnostic.config({
+  virtual_text = true,
+})

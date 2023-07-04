@@ -6,17 +6,22 @@ return require('packer').startup(function(use)
   use ( 'mbbill/undotree' )
   use ( 'eandrju/cellular-automaton.nvim' )
   use ( 'lervag/vimtex' )
-  use ( 'sbdchd/neoformat' )
   use ( 'RRethy/vim-illuminate' )
   use ( 'nvim-tree/nvim-web-devicons' )
   use ( "windwp/nvim-autopairs" )
   use ( 'lukas-reineke/indent-blankline.nvim' )
   use ( 'numToStr/Comment.nvim' )
   use ( 'lewis6991/gitsigns.nvim' )
-  use ( "folke/zen-mode.nvim" )
+  use ( 'folke/zen-mode.nvim' )
   use ( "folke/twilight.nvim" )
+  use ( 'mfussenegger/nvim-jdtls' )
   use ( 'shaunsingh/nord.nvim' )
   use { 'catppuccin/nvim', as = 'catppuccin' }
+
+  use {
+    "kylechui/nvim-surround",
+    tag = "*",
+  }
 
   use {
     "akinsho/toggleterm.nvim",
@@ -47,6 +52,15 @@ return require('packer').startup(function(use)
     'akinsho/bufferline.nvim',
     tag = "v3.*",
     requires = 'nvim-tree/nvim-web-devicons',
+  }
+
+  use {
+    "jackMort/ChatGPT.nvim",
+    requires = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    },
   }
 
   use {
@@ -81,7 +95,7 @@ return require('packer').startup(function(use)
 
   use {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
+    branch = 'v2.x',
     requires = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},
